@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button>Click</button>
+    <div class="list"></div>
+    <script>
+      const btn = document.querySelector("button");
+      const list = document.querySelector(".list");
+
+      //   we create an Observable Class which has 3 parts:
+      class Observable {
+        constructor() {
+          // list of observers
+          this.observers = [];
+        }
+        // a method to add observers to the list
+        subscribe(fn) {
+          this.observers.push(fn);
+        }
+        // a method to noty to list that some event is happend
+        notify(data) {
+          this.observers.forEach((fn) => fn(data));
+        }
+      }
+
+      //   this an observer
+      function setTime(data) {
+        const el = document.createElement("h1");
+        el.innerText = Date.now();
+        list.insertAdjacentElement("beforeend", el);
+      }
+      // this another observer
+      function logData(data) {
+        console.log(data);
+      }
+
+      //   constracting the observable
+      const observer = new Observable();
+
+      //   subscribe observers
+      observer.subscribe(setTime);
+      observer.subscribe(logData);
+
+      //   notfy subscribers about click event
+      btn.addEventListener("click", () => {
+        observer.notify("hello");
+      });
+    </script>
+  </body>
+</html>
