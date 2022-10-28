@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button class="inc">increas counter 1 +</button><br />
+    <button class="dec">decreas counter 1 -</button>
+    <h1>counter 1 : <span class="c1"></span></h1>
+    <script>
+      // Singletons are actually considered an anti-pattern, and can (or.. should) be avoided in JavaScript.
+
+      let instance;
+      let counter = 0;
+
+      // In js we can use regular object instead of Class
+      class Counter {
+        constructor() {
+          if (instance) {
+            throw Error("You can only have one instance");
+          }
+          instance = this;
+        }
+        getInstance() {
+          return this;
+        }
+
+        getCount() {
+          return counter;
+        }
+
+        increment() {
+          return ++counter;
+        }
+
+        decrement() {
+          return --counter;
+        }
+      }
+
+      const counter1 = Object.freeze(new Counter());
+
+      function render() {
+        document.querySelector(".c1").insertAdjacentText("beforeend", counter1.getCount());
+      }
+
+      document.querySelector(".inc").addEventListener("click", (e) => {
+        counter1.increment();
+        render();
+      });
+      document.querySelector(".dec").addEventListener("click", (e) => {
+        counter1.decrement();
+        render();
+      });
+    </script>
+  </body>
+</html>
