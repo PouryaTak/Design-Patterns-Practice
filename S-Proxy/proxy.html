@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button class="btn01">change name via proxy</button>
+    <button class="btn02">change name via proxy</button>
+    <h1></h1>
+    <script>
+      // Share a single global instance throughout our application
+      // Instead of interacting with the target object directly, we'll interact with the Proxy object.
+
+      const obj = {
+        name: "ali",
+        age: 26,
+      };
+
+      // there are many methods that you can add to the Proxy handler, the two most common ones are get and set:
+      const handler = {
+        get(obj, prop) {
+          return obj[prop];
+        },
+        set(obj, prop, val) {
+          obj[prop] = val;
+        },
+      };
+      // Initiate Proxy
+      const proxy = new Proxy(obj, handler);
+
+      const h1 = document.querySelector("h1");
+      // accessing property
+      h1.innerText = proxy.name;
+
+      document.querySelector(".btn01").addEventListener("click", (e) => {
+        //  changing property
+        proxy.name = "david";
+        h1.innerText = proxy.name;
+        console.log(proxy);
+      });
+
+      // we can use internal method called reflect to address props in hendler
+      const handler_reflect = {
+        get(obj, prop) {
+          return Reflect.get(obj, prop);
+        },
+        set(obj, prop, val) {
+          Reflect.set(obj, prop, val);
+        },
+      };
+
+      const proxy02 = new Proxy(obj, handler_reflect);
+
+      document.querySelector(".btn02").addEventListener("click", (e) => {
+        //  changing property
+        proxy02.name = "sisi";
+        h1.innerText = proxy02.name;
+        console.log(proxy02);
+      });
+    </script>
+  </body>
+</html>
